@@ -1,9 +1,9 @@
 " Tasks syntax
 " Language:    Tasks
 " Maintainer:  Chris Rolfs
-" Last Change: Aug 4th, 2015
+" Last Change: Aug 7, 2015
 " Version:	   0.1
-" URL:         https://github.com/irrationalistic/tasks.vim
+" URL:         https://github.com/irrationalistic/vim-tasks
 
 if version < 600
   syntax clear

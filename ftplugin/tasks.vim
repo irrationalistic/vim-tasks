@@ -1,3 +1,9 @@
+" Tasks plugin
+" Language:    Tasks
+" Maintainer:  Chris Rolfs
+" Last Change: Aug 7, 2015
+" Version:	   0.1
+" URL:         https://github.com/irrationalistic/vim-tasks
 
 if exists("b:did_ftplugin")
   finish
