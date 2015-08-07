@@ -7,7 +7,8 @@ endif
 nnoremap <buffer> <leader>n :call NewTask(1)<cr>
 nnoremap <buffer> <leader>N :call NewTask(-1)<cr>
 nnoremap <buffer> <leader>d :call TaskComplete()<cr>
-nnoremap <buffer> <leader>c :call TaskCancel()<cr>
+nnoremap <buffer> <leader>x :call TaskCancel()<cr>
+nnoremap <buffer> <leader>a :call TasksArchive()<cr>
 
 " ACTIONS
 
@@ -147,4 +148,53 @@ function! TaskCancel()
       call AddAttribute('project', join(projects, ' / '))
     endif
   endif
+endfunc
+
+function! TasksArchive()
+  " go over every line. Compile a list of all cancelled or completed items
+  " until the end of the file is reached or the archive project is
+  " detected, whicheved happens first.
+  let archiveLine = -1
+  let completedTasks = []
+  let lineNr = 0
+  while lineNr < line('$')
+    let line = getline(lineNr)
+    let doneMatch = match(line, s:regDone)
+    let cancelledMatch = match(line, s:regCancelled)
+    let projectMatch = matchstr(line, s:regProject)
+    
+    if doneMatch > -1 || cancelledMatch > -1
+      call add(completedTasks, [lineNr, Trim(line)])
+    endif
+
+    if projectMatch > -1 && Trim(line) == 'Archive:'
+      let archiveLine = lineNr
+      break
+    endif
+
+    let lineNr = lineNr + 1
+  endwhile
+
+  if archiveLine == -1
+    " no archive found yet, so let's stick one in at the very bottom
+    exec '%s#\($\n\s*\)\+\%$##'
+    exec 'normal Go'
+    exec 'normal o＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
+    exec 'normal oArchive:'
+    let archiveLine = line('.')
+  endif
+
+  call cursor(archiveLine, 0)
+
+  for [lineNr, line] in completedTasks
+    exec 'normal o' . line
+    if indent(line('.')) == 0
+      exec 'normal >>'
+    endif
+  endfor
+
+  for [lineNr, line] in reverse(completedTasks)
+    call cursor(lineNr, 0)
+    exec 'normal "_dd'
+  endfor
 endfunc
