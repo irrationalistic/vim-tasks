@@ -16,28 +16,39 @@ This uses utf characters, so it is still valid as a plain text document.
 
 ### Vundle
 Place this in your `.vimrc`:
+
     Plugin 'irrationalistic/vim-tasks'
+
 ... then run the following in Vim:
+
     :source %
     :PluginInstall
+
 For Vundle version < 0.10.2, replace Plugin with Bundle above.
 
 ### NeoBundle
 Place this in your `.vimrc`:
+
     NeoBundle 'irrationalistic/vim-tasks'
+
 ... then run the following in Vim:
+
     :source %
     :NeoBundleInstall
 
 ### VimPlug
 Place this in your `.vimrc`:
+
     NeoBundle 'irrationalistic/vim-tasks'
+
 ... then run the following in Vim:
+
     :source %
     :NeoBundleInstall
 
 ### Pathogen
 Run the following in a terminal:
+
     cd ~/.vim/bundle
     git clone https://github.com/irrationalistic/vim-tasks
 
@@ -45,8 +56,8 @@ Run the following in a terminal:
 Run `:help Tasks` to view the full documentation.
 
 ## Preset Bindings
-`<leader> n` - new task below
-`<leader> N` - new task above
-`<leader> d` - toggle current task complete
-`<leader> x` - toggle current task cancelled
-`<leader> a` - send completed tasks to the archive
+* `<leader> n` - new task below
+* `<leader> N` - new task above
+* `<leader> d` - toggle current task complete
+* `<leader> x` - toggle current task cancelled
+* `<leader> a` - send completed tasks to the archive
