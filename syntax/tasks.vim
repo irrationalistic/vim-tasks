@@ -21,15 +21,23 @@ unlet! b:current_syntax
 syn case match
 syn sync fromstart
 
-syn match tMarker "☐" contained
-syn match tMarkerCancelled "✘" contained
-syn match tMarkerComplete "✔" contained
-syn match tAttribute /@\w\+\(([^)]*)\)\=/ contained
-syn match tAttributeCompleted /@\w\+\(([^)]*)\)\=/ contained
+let b:regesc = '[]()?.*@='
+
+function! s:CreateMatch(name, regex)
+  exec 'syn match ' . a:name . ' "' . a:regex . '" contained'
+endfunc
+
+
+call s:CreateMatch('tMarker', '^\s*' . escape(g:TasksMarkerBase, b:regesc))
+call s:CreateMatch('tMarkerCancelled', '^\s*' . escape(g:TasksMarkerCancelled, b:regesc))
+call s:CreateMatch('tMarkerComplete', '^\s*' . escape(g:TasksMarkerDone, b:regesc))
+
+exec 'syn match tAttribute "' . g:TasksAttributeMarker . '\w\+\(([^)]*)\)\=" contained'
+exec 'syn match tAttributeCompleted "' . g:TasksAttributeMarker . '\w\+\(([^)]*)\)\=" contained'
 
 syn region tTask start=/^\s*/ end=/$/ oneline keepend contains=tMarker,tAttribute
-syn region tTaskDone start=/^[\s]*.*@done/ end=/$/ oneline contains=tMarkerComplete,tAttributeCompleted
-syn region tTaskCancelled start=/^[\s]*.*@cancelled/ end=/$/ oneline contains=tMarkerCancelled,tAttributeCompleted
+exec 'syn region tTaskDone start="^[\s]*.*'.g:TasksAttributeMarker.'done" end=/$/ oneline contains=tMarkerComplete,tAttributeCompleted'
+exec 'syn region tTaskCancelled start="^[\s]*.*'.g:TasksAttributeMarker.'cancelled" end=/$/ oneline contains=tMarkerCancelled,tAttributeCompleted'
 syn match tProject "^\s*.*:$"
 
 hi def link tMarker Comment

@@ -52,7 +52,21 @@ Run the following in a terminal:
     cd ~/.vim/bundle
     git clone https://github.com/irrationalistic/vim-tasks
 
-## Settings
+## Settings Defaults
+
+`let g:TasksMarkerBase = '☐'`
+
+`let g:TasksMarkerDone = '✔'`
+
+`let g:TasksMarkerCancelled = '✘'`
+
+`let g:TasksDateFormat = '%Y-%m-%d %H:%M'`
+
+`let g:TasksAttributeMarker = '@'`
+
+`let g:TasksArchiveSeparator = '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'`
+
+
 Run `:help Tasks` to view the full documentation.
 
 ## Preset Bindings

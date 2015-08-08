@@ -1,10 +1,11 @@
 thing:
   ✔ Test _task_ with **bold** and [link](http://github.com) @done(2015-07-23 21:02)
 Roadmap v2:
-  ☐ Testing @tag1(value) and @tag2(value2)
+  ☐ Testing #tag1(value) and #tag2(value2)
   ☐ Show player (and teller, somewhere, avatars) @test(value) @another(value) @test
-  ☐ Chrome notifications
-  ☐ Click to toggle enter-send vs cmd+enter -send @ nothing
+  [ ] Chrome notifications #(alternate attributes)
+  [-] Click to toggle enter-send vs cmd+enter -send @ nothing @cancelled(2015-08-07 20:02) @project(Roadmap v2)
+  [x] Something else @done(2015-08-07 20:02) @project(Roadmap v2)
 
   Test Project:
     ☐ another sub item http://test.com with text

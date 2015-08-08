@@ -5,9 +5,10 @@
 " Version:	   0.1
 " URL:         https://github.com/irrationalistic/vim-tasks
 
-if exists("b:did_ftplugin")
+if exists("b:loaded_tasks")
   finish
 endif
+let b:loaded_tasks = 1
 
 " MAPPINGS
 nnoremap <buffer> <leader>n :call NewTask(1)<cr>
@@ -16,14 +17,34 @@ nnoremap <buffer> <leader>d :call TaskComplete()<cr>
 nnoremap <buffer> <leader>x :call TaskCancel()<cr>
 nnoremap <buffer> <leader>a :call TasksArchive()<cr>
 
-" ACTIONS
+" GLOBALS
 
+" Helper for initializing defaults
+" (https://github.com/scrooloose/nerdtree/blob/master/plugin/NERD_tree.vim#L39)
+function! s:initVariable(var, value)
+  if !exists(a:var)
+    exec 'let ' . a:var . ' = ' . "'" . substitute(a:value, "'", "''", "g") . "'"
+    return 1
+  endif
+  return 0
+endfunc
+
+call s:initVariable('g:TasksMarkerBase', '☐')
+call s:initVariable('g:TasksMarkerDone', '✔')
+call s:initVariable('g:TasksMarkerCancelled', '✘')
+call s:initVariable('g:TasksDateFormat', '%Y-%m-%d %H:%M')
+call s:initVariable('g:TasksAttributeMarker', '@')
+call s:initVariable('g:TasksArchiveSeparator', '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿')
+
+let b:regesc = '[]()?.*@='
+
+" LOCALS
 let s:regProject = '^\s*.*:$'
-let s:regMarker = '☐\|✘\|✔'
-let s:regDone = '@done'
-let s:regCancelled = '@cancelled'
-let s:regAttribute = '@\w\+\(([^)]*)\)\='
-let s:dateFormat = '%Y-%m-%d %H:%M'
+let s:regMarker = join([escape(g:TasksMarkerBase, b:regesc), escape(g:TasksMarkerDone, b:regesc), escape(g:TasksMarkerCancelled, b:regesc)], '\|')
+let s:regDone = g:TasksAttributeMarker . 'done'
+let s:regCancelled = g:TasksAttributeMarker . 'cancelled'
+let s:regAttribute = g:TasksAttributeMarker . '\w\+\(([^)]*)\)\='
+let s:dateFormat = g:TasksDateFormat
 
 function! Trim(input_string)
     return substitute(a:input_string, '^\s*\(.\{-}\)\s*$', '\1', '')
@@ -32,7 +53,7 @@ endfunction
 function! NewTask(direction)
   let l:line = getline('.')
   let l:isMatch = match(l:line, s:regProject)
-  let l:text = '☐ '
+  let l:text = g:TasksMarkerBase . ' '
 
   if a:direction == -1
     exec 'normal O' . l:text
@@ -64,13 +85,13 @@ function! AddAttribute(name, value)
   if a:value != ''
     let l:attVal = '(' . a:value . ')'
   endif
-  exec 'normal A @' . a:name . l:attVal
+  exec 'normal A ' . g:TasksAttributeMarker . a:name . l:attVal
 endfunc
 
 function! RemoveAttribute(name)
   " if the attribute exists, remove it
   let l:rline = getline('.')
-  let l:regex = '@' . a:name . '\(([^)]*)\)\='
+  let l:regex = g:TasksAttributeMarker . a:name . '\(([^)]*)\)\='
   let l:attStart = match(l:rline, regex)
   if l:attStart > -1
     let l:attEnd = matchend(l:rline, l:regex)
@@ -108,7 +129,7 @@ function! TaskComplete()
     if l:doneMatch > -1
       " this task is done, so we need to remove the marker and the
       " @done/@project
-      call SetLineMarker('☐')
+      call SetLineMarker(g:TasksMarkerBase)
       call RemoveAttribute('done')
       call RemoveAttribute('project')
     else
@@ -120,7 +141,7 @@ function! TaskComplete()
       endif
       " swap out the marker, add the @done, find the projects and add @project
       let l:projects = GetProjects()
-      call SetLineMarker('✔')
+      call SetLineMarker(g:TasksMarkerDone)
       call AddAttribute('done', strftime(s:dateFormat))
       call AddAttribute('project', join(l:projects, ' / '))
     endif
@@ -137,7 +158,7 @@ function! TaskCancel()
     if l:cancelledMatch > -1
       " this task is done, so we need to remove the marker and the
       " @done/@project
-      call SetLineMarker('☐')
+      call SetLineMarker(g:TasksMarkerBase)
       call RemoveAttribute('cancelled')
       call RemoveAttribute('project')
     else
@@ -149,7 +170,7 @@ function! TaskCancel()
       endif
       " swap out the marker, add the @done, find the projects and add @project
       let l:projects = GetProjects()
-      call SetLineMarker('✘')
+      call SetLineMarker(g:TasksMarkerCancelled)
       call AddAttribute('cancelled', strftime(s:dateFormat))
       call AddAttribute('project', join(l:projects, ' / '))
     endif
@@ -185,7 +206,7 @@ function! TasksArchive()
     " no archive found yet, so let's stick one in at the very bottom
     exec '%s#\($\n\s*\)\+\%$##'
     exec 'normal Go'
-    exec 'normal o＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
+    exec 'normal o' . g:TasksArchiveSeparator
     exec 'normal oArchive:'
     let l:archiveLine = line('.')
   endif

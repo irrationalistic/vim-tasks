@@ -10,10 +10,11 @@
 CONTENTS                                                       *TasksContents*
 
     1. Intro.........................................|Tasks|
-    2. Tasks API.....................................|TasksAPI|
-    3. Mappings......................................|TasksMappings|
-    4. Changelog.....................................|TasksChangelog|
-    5. Credits.......................................|TasksCredits|
+    2. Tasks Settings................................|TasksSettings|
+    3. Tasks API.....................................|TasksAPI|
+    4. Mappings......................................|TasksMappings|
+    5. Changelog.....................................|TasksChangelog|
+    6. Credits.......................................|TasksCredits|
 
 ==============================================================================
 1. Intro                                                               *Tasks*
@@ -32,7 +33,48 @@ able to use all the core vim commands alongside the additional utility methods
 provided below.
 
 ==============================================================================
-2. Tasks API                                                        *TasksAPI*
+2. Tasks Settings                                                *TasksSettings*
+
+                                                           *g:TasksMarkerBase*
+Default: ☐
+Defines the default marker for an incomplete task >
+    let g:TasksMarkerBase = '☐'
+<
+
+                                                            *g:TasksMarkerDone*
+Default: ✔
+Defines the default marker for a task that has been completed >
+    let g:TasksMarkerDone = '✔'
+<
+
+                                                       *g:TasksMarkerCancelled*
+Default: ✘
+Defines the default marker for a task that has been cancelled >
+    let g:TasksMarkerCancelled = '✘'
+<
+
+                                                       *g:TasksAttributeMarker*
+Default: @
+Attributes can be attached to any task and this marker defines how they are
+set. For instance, if this is set to '@', an attribute would follow the format
+of '@myAttribute(attribute value)' >
+    let g:TasksAttributeMarker = '@'
+<
+
+                                                            *g:TasksDateFormat*
+Default: %Y-%m-%d %H:%M
+Uses 'strftime' to define how timestamps will be set on completed or cancelled
+tasks >
+    let g:TasksArchiveSeparator = '%Y-%m-%d %H:%M'
+<
+
+                                                       *g:TasksArchiveSeparator*
+Default: ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Separates the archive project from the rest of the tasks/projects >
+    let g:TasksArchiveSeparator = '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
+<
+==============================================================================
+3. Tasks API                                                        *TasksAPI*
 
 NewTask({direction})                                               *NewTask()*
     Create a new task according to the direction given. If the value is 1,
@@ -60,7 +102,7 @@ TasksArchive()                                                *TasksArchive()*
     in the order they are found and remove them from the previous sections.
 
 ==============================================================================
-3. Tasks Mappings                                              *TasksMappings*
+4. Tasks Mappings                                              *TasksMappings*
 
 *<leader>n* Add a new task below the current line
 *<leader>N* Add a new task above the current line
@@ -69,7 +111,11 @@ TasksArchive()                                                *TasksArchive()*
 *<leader>a* Update/build the archives
 
 ==============================================================================
-4. Changelog                                                  *TasksChangelog*
+5. Changelog                                                  *TasksChangelog*
+
+1.0.0
+    - Added in settings
+    - Allowed syntax to be controlled by settings
 
 0.1.0
     - Initial build
@@ -79,7 +125,7 @@ TasksArchive()                                                *TasksArchive()*
     - Archiving
 
 ==============================================================================
-5. Credits                                                      *TasksCredits*
+6. Credits                                                      *TasksCredits*
 
 The original inspiration for this plugin was written by user 'aziz' on github:
     https://github.com/aziz/PlainTasks
