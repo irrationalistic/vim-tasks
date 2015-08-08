@@ -1,0 +1,91 @@
+*tasks.txt*    Handle tasks/todo files in vim
+
+                ,--------.              ,--.            
+                '--.  .--',--,--. ,---. |  |,-.  ,---.  
+                   |  |  ' ,-.  |(  .-' |     / (  .-'  
+                   |  |  \ '-'  |.-'  `)|  \  \ .-'  `) 
+                   `--'   `--`--'`----' `--'`--'`----'  
+
+==============================================================================
+CONTENTS                                                       *TasksContents*
+
+    1. Intro.........................................|Tasks|
+    2. Tasks API.....................................|TasksAPI|
+    3. Mappings......................................|TasksMappings|
+    4. Changelog.....................................|TasksChangelog|
+    5. Credits.......................................|TasksCredits|
+
+==============================================================================
+1. Intro                                                               *Tasks*
+
+Tasks is a plugin built to help manage plain-text todo lists. Each file is
+simply utf-8, so it will be readable in other text editors and doesn't need
+any fancy gui components.
+
+You can add, complete, cancel, and archive tasks from each todo list file.
+Configuration will allow you to customize the different aspects of how the
+markers are set up as well as the timestamping of completed tasks.
+
+The plugin allows you to manage your task lists without leaving the editor,
+which improves workflow. Since it is essentially just a syntax, you are also
+able to use all the core vim commands alongside the additional utility methods
+provided below.
+
+==============================================================================
+2. Tasks API                                                        *TasksAPI*
+
+NewTask({direction})                                               *NewTask()*
+    Create a new task according to the direction given. If the value is 1,
+    the task will be created below the cursor's line. If it is -1, it will
+    be created above. Editor will enter insert mode after running the command.
+
+TaskComplete()                                                *TaskComplete()*
+    If the cursor (or selection) is over any task lines, they will be given
+    the completed marker as well as two attributes: @done with the current
+    timestamp, and @project, with a delineated path of nested projects.
+
+
+TaskCancel()                                                    *TaskCancel()*
+    If the cursor (or selection) is over any task lines, they will be given
+    the cancelled marker as well as two attributes: @cancelled with the
+    current timestamp, and @project, with a delineated path of
+    nested projects.
+
+TasksArchive()                                                *TasksArchive()*
+    Each line in the file will be traversed from top to bottom, seeking any
+    completed (done or cancelled) tasks. If the 'Archive' project is
+    encountered, it will stop searching. If no 'Archive' is found, it
+    will place one at the end of the file. Once it has an 'Archive'
+    project, it will move all the completed tasks to the top of the list
+    in the order they are found and remove them from the previous sections.
+
+==============================================================================
+3. Tasks Mappings                                              *TasksMappings*
+
+*<leader>n* Add a new task below the current line
+*<leader>N* Add a new task above the current line
+*<leader>d* Complete the current task(s)
+*<leader>x* Cancel the current task(s)
+*<leader>a* Update/build the archives
+
+==============================================================================
+4. Changelog                                                  *TasksChangelog*
+
+0.1.0
+    - Initial build
+    - Add tasks
+    - Cancel tasks
+    - Complete tasks
+    - Archiving
+
+==============================================================================
+5. Credits                                                      *TasksCredits*
+
+The original inspiration for this plugin was written by user 'aziz' on github:
+    https://github.com/aziz/PlainTasks
+
+This is more or less a port of the plugin for the Atom editor:
+    https://github.com/irrationalistic/atom-tasks
+
+
+ vim:tw=78:ts=4:ft=help:norl:
