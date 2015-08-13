@@ -39,12 +39,12 @@ Place this in your `.vimrc`:
 ### VimPlug
 Place this in your `.vimrc`:
 
-    NeoBundle 'irrationalistic/vim-tasks'
+    Plug 'irrationalistic/vim-tasks'
 
 ... then run the following in Vim:
 
     :source %
-    :NeoBundleInstall
+    :PlugInstall
 
 ### Pathogen
 Run the following in a terminal:
